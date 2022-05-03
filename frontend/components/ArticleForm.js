@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PT from 'prop-types'
+import axios from 'axios';
 
 const initialFormValues = { title: '', text: '', topic: '' }
 
@@ -8,7 +9,7 @@ export default function ArticleForm(props) {
   // ✨ where are my props? Destructure them here
 
   useEffect(() => {
-		axios.get(`http://localhost:9000/api/articles${id}`)
+		axios.post(`http://localhost:9000/api/articles`)
 		.then(res=>{
 			setValues(res.data);
 		})
@@ -25,6 +26,11 @@ export default function ArticleForm(props) {
 
   const onSubmit = evt => {
     evt.preventDefault()
+    axios.put()
+      .theb(res=>{
+        setValues(res.data);
+        //might need push re-direct here
+      })
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
@@ -62,7 +68,7 @@ export default function ArticleForm(props) {
       </select>
       <div className="button-group">
         <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        <button onClick={Function.prototype}>Cancel edit</button>
+        <button>Cancel edit</button>
       </div>
     </form>
   )

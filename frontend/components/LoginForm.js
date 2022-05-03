@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react';
 import PT from 'prop-types'
+import axios from 'axios'
 
 const initialFormValues = {
   username: '',
@@ -7,7 +9,13 @@ const initialFormValues = {
 }
 export default function LoginForm(props) {
   const [values, setValues] = useState(initialFormValues)
+  //changes made by me below
+
   // ✨ where are my props? Destructure them here
+
+  const handleTextChange = (event) => {
+    enableButton(event.target.value)
+  }
 
   const onChange = evt => {
     const { id, value } = evt.target
@@ -15,11 +23,25 @@ export default function LoginForm(props) {
   }
 
   const onSubmit = evt => {
-    evt.preventDefault()
-    // ✨ implement
+    // evt.preventDefault()
+    // axios.post('http://localhost:9000/api/login')
+    // .then(resp => {
+    //   localStorage.setItem("token", resp.data.payload)
+    //   //Funton here for spinner?
+    //   push('/articles')
+    // })
+    // .catch(err=>
+    //   console.log(err))
+    // // ✨ implement
+
+    // //POST Here??
   }
 
   const isDisabled = () => {
+    evt.preventDefault();
+
+
+      //if else statement here or switch statement?
     // ✨ implement
     // Trimmed username must be >= 3, and
     // trimmed password must be >= 8 for

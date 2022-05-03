@@ -1,52 +1,26 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react';
-import PT from 'prop-types'
-import axios from 'axios'
+import React, { useState } from "react";
+import PT from "prop-types";
 
 const initialFormValues = {
-  username: '',
-  password: '',
-}
+  username: "",
+  password: "",
+};
 export default function LoginForm(props) {
-  const [values, setValues] = useState(initialFormValues)
-  //changes made by me below
+  const [values, setValues] = useState(initialFormValues);
+  const { login } = props;
 
-  // ✨ where are my props? Destructure them here
+  const onChange = (evt) => {
+    const { id, value } = evt.target;
+    setValues({ ...values, [id]: value });
+  };
 
-  const handleTextChange = (event) => {
-    enableButton(event.target.value)
-  }
-
-  const onChange = evt => {
-    const { id, value } = evt.target
-    setValues({ ...values, [id]: value })
-  }
-
-  const onSubmit = evt => {
-    // evt.preventDefault()
-    // axios.post('http://localhost:9000/api/login')
-    // .then(resp => {
-    //   localStorage.setItem("token", resp.data.payload)
-    //   //Funton here for spinner?
-    //   push('/articles')
-    // })
-    // .catch(err=>
-    //   console.log(err))
-    // // ✨ implement
-
-    // //POST Here??
-  }
-
-  const isDisabled = () => {
+  const onSubmit = (evt) => {
     evt.preventDefault();
+    login(values);
+  };
 
-
-      //if else statement here or switch statement?
-    // ✨ implement
-    // Trimmed username must be >= 3, and
-    // trimmed password must be >= 8 for
-    // the button to become enabled
-  }
+  const isDisabled =
+    values.username.trim().length >= 3 && values.password.trim().length >= 8;
 
   return (
     <form id="loginForm" onSubmit={onSubmit}>
@@ -64,12 +38,14 @@ export default function LoginForm(props) {
         onChange={onChange}
         placeholder="Enter password"
         id="password"
+        type="password"
       />
-      <button disabled={isDisabled()} id="submitCredentials">Submit credentials</button>
+      <button disabled={!isDisabled} id="submitCredentials">
+        Submit credentials
+      </button>
     </form>
-  )
+  );
 }
-
 // 🔥 No touchy: LoginForm expects the following props exactly:
 LoginForm.propTypes = {
   login: PT.func.isRequired,

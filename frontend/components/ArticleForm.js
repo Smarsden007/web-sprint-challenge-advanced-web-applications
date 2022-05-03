@@ -1,50 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import PT from 'prop-types'
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import PT from "prop-types";
 
-const initialFormValues = { title: '', text: '', topic: '' }
+const initialFormValues = { title: "", text: "", topic: "" };
 
 export default function ArticleForm(props) {
-  const [values, setValues] = useState(initialFormValues)
-  // ✨ where are my props? Destructure them here
+  const [values, setValues] = useState(initialFormValues);
+
+  const { articles, postArticle, updateArticle, setCurrentArticleId } = props;
 
   useEffect(() => {
-		axios.post(`http://localhost:9000/api/articles`)
-		.then(res=>{
-			setValues(res.data);
-		})
-		.catch(err=>{
-			console.log(err.response);
-		})
-	}, []);
-  //lets go
+    setValues(articles || initialFormValues);
+  }, [articles]);
 
-  const onChange = evt => {
-    const { id, value } = evt.target
-    setValues({ ...values, [id]: value })
-  }
+  const onChange = (evt) => {
+    const { id, value } = evt.target;
+    setValues({ ...values, [id]: value });
+  };
 
-  const onSubmit = evt => {
-    evt.preventDefault()
-    axios.put()
-      .theb(res=>{
-        setValues(res.data);
-        //might need push re-direct here
-      })
-    // ✨ implement
-    // We must submit a new post or update an existing one,
-    // depending on the truthyness of the `currentArticle` prop.
-  }
+  const submit = (evt) => {
+    evt.preventDefault();
+    articles ? updateArticle(articles.article_id, values) : postArticle(values);
+    setValues(initialFormValues);
+  };
 
-  const isDisabled = () => {
-    // ✨ implement
-    // Make sure the inputs have some values
-  }
+  const isDisabled =
+    values.title.trim().length >= 1 &&
+    values.text.trim().length >= 1 &&
+    values.topic !== "";
 
   return (
-    // ✨ fix the JSX: make the heading display either "Edit" or "Create"
-    // and replace Function.prototype with the correct function
-    <form id="form" onSubmit={onSubmit}>
+    <form id="form" onSubmit={submit}>
       <h2>Create Article</h2>
       <input
         maxLength={50}
@@ -67,11 +52,16 @@ export default function ArticleForm(props) {
         <option value="Node">Node</option>
       </select>
       <div className="button-group">
-        <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        <button>Cancel edit</button>
+        <button disabled={!isDisabled} id="submitArticle">
+          Submit
+        </button>
+        {articles && (
+          <button onClick={() => setCurrentArticleId(null)}>Cancel edit</button>
+        )}
+        )
       </div>
     </form>
-  )
+  );
 }
 
 // 🔥 No touchy: LoginForm expects the following props exactly:
